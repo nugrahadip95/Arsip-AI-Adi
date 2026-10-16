@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARSIP Adi — Dashboard</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #17233f;
+      background: #f5f8fd;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    aside {
+      width: 245px;
+      background: white;
+      padding: 26px 18px;
+      border-right: 1px solid #e5ebf5;
+      flex-shrink: 0;
+    }
+    .brand { font-size: 25px; font-weight: 800; color: #123b80; }
+    .subtitle { color: #66758e; font-size: 13px; line-height: 1.6; margin: 8px 0 28px; }
+    nav a {
+      display: block; text-decoration: none; color: #263753;
+      padding: 13px; border-radius: 10px; margin: 5px 0;
+    }
+    nav a.active, nav a:hover { background: #eaf1ff; color: #1456c0; }
+    main { padding: 30px; min-width: 0; flex: 1; }
+    h1 { font-size: 27px; margin: 0 0 8px; }
+    .muted { color: #64748b; }
+    .search, .panel, .stat, .folder {
+      background: white; border: 1px solid #e5ebf5;
+      border-radius: 14px; box-shadow: 0 3px 12px #233d6508;
+    }
+    .search { padding: 15px; margin: 24px 0; display: flex; gap: 10px; }
+    input {
+      width: 100%; min-width: 0; padding: 14px;
+      border: 1px solid #d5deed; border-radius: 9px; font-size: 15px;
+    }
+    button {
+      background: #123b80; color: white; border: 0; border-radius: 9px;
+      padding: 12px 22px; cursor: pointer; font-weight: 700;
+    }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .stat { padding: 19px; }
+    .stat strong { display: block; font-size: 25px; margin-bottom: 6px; }
+    h2 { font-size: 20px; margin: 28px 0 15px; }
+    .folders { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .folder { padding: 20px; cursor: pointer; }
+    .folder:hover { border-color: #9dbcf5; }
+    .emoji { font-size: 27px; margin-bottom: 12px; }
+    .folder strong { display: block; margin-bottom: 6px; }
+    .panel { padding: 20px; margin-top: 25px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: 13px 10px; border-bottom: 1px solid #edf1f7; font-size: 14px; }
+    th { color: #66758e; }
+    @media (max-width: 850px) {
+      aside { width: 180px; }
+      main { padding: 20px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .folders { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .layout { display: block; }
+      aside { width: 100%; padding: 15px; }
+      .subtitle { margin-bottom: 12px; }
+      nav { display: flex; overflow-x: auto; gap: 4px; }
+      nav a { white-space: nowrap; }
+      main { padding: 16px; }
+      .folders { grid-template-columns: 1fr 1fr; }
+      .search { flex-wrap: wrap; }
+      .search button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <div class="brand">📁 ARSIP AI</div>
+    <div class="subtitle">Kelola, Cari, dan Pahami Arsip Anda</div>
+    <nav>
+      <a class="active" href="#">⌂ Beranda</a>
+      <a href="#dokumen">▤ Semua Dokumen</a>
+      <a href="#folder">📁 Folder Saya</a>
+      <a href="#folder">▧ Kategori</a>
+      <a href="#ai">✦ Tanya Arsip AI</a>
+    </nav>
+    <p class="muted" style="font-size:12px;margin-top:35px">
+      Penyimpanan Google Drive<br>
+      File asli tetap di Google Drive.
+    </p>
+  </aside>
+
+  <main>
+    <h1>☀️ Selamat datang di ARSIP AI!</h1>
+    <p class="muted">Kelola arsip dengan lebih mudah, cepat, dan teratur.</p>
+
+    <div class="search">
+      <input id="search" placeholder="Cari dokumen atau folder...">
+      <button onclick="cari()">Cari</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><strong>—</strong><span>Total Dokumen</span></div>
+      <div class="stat"><strong>PDF</strong><span>Arsip dokumen</span></div>
+      <div class="stat"><strong>DOCX</strong><span>Dokumen Word</span></div>
+      <div class="stat"><strong> XLSX</strong><span>Dokumen Excel</span></div>
+    </div>
+
+    <h2 id="folder">📂 Folder Dokumen</h2>
+    <div class="folders" id="folders"></div>
+
+    <div class="panel" id="dokumen">
+      <h2 style="margin-top:0">📄 Dokumen Terbaru</h2>
+      <p class="muted">Daftar dokumen akan ditampilkan setelah Google Drive terhubung.</p>
+      <table>
+        <thead><tr><th>Nama Dokumen</th><th>Lokasi</th><th>Status</th></tr></thead>
+        <tbody id="files">
+          <tr><td colspan="3">Belum ada dokumen yang dimuat.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel" id="ai">
+      <h2 style="margin-top:0">✦ Tanya Arsip dengan AI</h2>
+      <p class="muted">Fitur AI akan kita aktifkan setelah koneksi Drive dan backend aman siap.</p>
+    </div>
+  </main>
+</div>
+
+<script>
+  const daftarFolder = [
+    ["Kepegawaian","📁"], ["Surat Masuk","📂"],
+    ["Surat Keluar","📂"], ["Sertifikat","📁"],
+    ["Kegiatan","📂"], ["Laporan","📁"],
+    ["Kehumasan","📂"], ["PDPB","📁"],
+    ["Referensi","📂"], ["RHK & SKP","📁"],
+    ["Dokumentasi","📂"], ["Lainnya","📁"]
+  ];
+
+  const wadah = document.getElementById("folders");
+  daftarFolder.forEach(([nama, ikon]) => {
+    const elemen = document.createElement("div");
+    elemen.className = "folder";
+    const gambar = document.createElement("div");
+    gambar.className = "emoji";
+    gambar.textContent = ikon;
+    const judul = document.createElement("strong");
+    judul.textContent = nama;
+    const keterangan = document.createElement("span");
+    keterangan.className = "muted";
+    keterangan.textContent = "Folder arsip";
+    elemen.append(gambar, judul, keterangan);
+    elemen.dataset.nama = nama.toLowerCase();
+    wadah.appendChild(elemen);
+  });
+
+  function cari() {
+    const kata = document.getElementById("search").value.trim().toLowerCase();
+    document.querySelectorAll(".folder").forEach(folder => {
+      folder.hidden = !folder.dataset.nama.includes(kata);
+    });
+  }
+
+  document.getElementById("search").addEventListener("keydown", e => {
+    if (e.key === "Enter") cari();
+  });
+</script>
+</body>
+</html>
